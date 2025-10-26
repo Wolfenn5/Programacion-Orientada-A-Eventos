@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup3">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup4">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup5">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup6">
+    </Component>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Registro de Actividades"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="campoTextoSegundoApellido" alignment="0" max="32767" attributes="0"/>
+                          <Component id="campoTextoNombre" max="32767" attributes="0"/>
+                          <Component id="campoTextoPrimerApellido" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="botonCBI" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="botonCSH" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="botonCyAD" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="labelSegundoApellido" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="etiquetaMatricula" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelPrimerApellido" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelNombre" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                          <Component id="campoTextoMatricula" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                          <Component id="etiquetaEdad" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="campoTextoEdad" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
+                          <Component id="etiquetaGenero" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="etiquetaDivision" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="botonRegistrar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="botonMasculino" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="botonFemenino" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="botonNoBinario" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="etiquetaActividadesInteres" min="-2" max="-2" attributes="0"/>
+                                  <Component id="checkboxEncuestas" min="-2" max="-2" attributes="0"/>
+                                  <Component id="checkboxProcesoInscripcion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="checkboxPERAJ" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="177" max="32767" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="169" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="labelNombre" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="campoTextoNombre" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Component id="labelPrimerApellido" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="campoTextoPrimerApellido" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="labelSegundoApellido" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="campoTextoSegundoApellido" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              <Component id="etiquetaMatricula" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="campoTextoMatricula" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="etiquetaEdad" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Component id="campoTextoEdad" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="etiquetaGenero" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="botonMasculino" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="botonFemenino" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="botonNoBinario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                      <Component id="etiquetaDivision" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="botonCBI" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="botonCSH" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="botonCyAD" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <Component id="etiquetaActividadesInteres" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="checkboxEncuestas" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="checkboxProcesoInscripcion" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="checkboxPERAJ" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="7" max="32767" attributes="0"/>
+              <Component id="botonRegistrar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="labelNombre">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nombre"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelPrimerApellido">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Primer Apellido"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelSegundoApellido">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Segundo Apellido"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="campoTextoNombre">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoTextoNombreActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="campoTextoPrimerApellido">
+    </Component>
+    <Component class="javax.swing.JTextField" name="campoTextoSegundoApellido">
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sistema de Registro de Actividades de cada Estudiante"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="etiquetaMatricula">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Matricula"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="campoTextoMatricula">
+    </Component>
+    <Component class="javax.swing.JLabel" name="etiquetaEdad">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Edad"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="campoTextoEdad">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoTextoEdadActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="etiquetaGenero">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Genero"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonFemenino">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Femenino"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonFemeninoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonNoBinario">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="No binario"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonNoBinarioActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonMasculino">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Masculino"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonMasculinoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="etiquetaDivision">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Division"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonCBI">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CBI"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCBIActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonCSH">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CSH"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCSHActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="botonCyAD">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CyAD"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonCyADActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="etiquetaActividadesInteres">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Actividades que te interesan"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkboxEncuestas">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Encuestas"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkboxEncuestasActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkboxProcesoInscripcion">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Proceso de Inscripcion"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkboxProcesoInscripcionActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkboxPERAJ">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PERAJ"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkboxPERAJActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="botonRegistrar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Registrar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonRegistrarActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
