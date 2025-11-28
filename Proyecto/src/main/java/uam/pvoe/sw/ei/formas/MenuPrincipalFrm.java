@@ -4,6 +4,7 @@
  */
 package uam.pvoe.sw.ei.formas;
 
+import uam.pvoe.sw.ei.compartido.Compartido;
 /**
  *
  * @author btosk
@@ -17,7 +18,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
      */
     public MenuPrincipalFrm() {
         initComponents();
-        lblUsuarioActual.setText("Usuario: " + uam.pvoe.sw.ei.compartido.Compartido.loginUsuario);
+        lblUsuarioActual.setText("Usuario: " + Compartido.loginUsuario);
     }
 
     /**

@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package uam.pvoe.sw.ei.formas;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import uam.pvoe.sw.ei.operaciones.GestionInfantes;
 
 /**
  *
@@ -17,8 +20,22 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
      */
     public ConsultaNivelesFrm() {
         initComponents();
+        cargarDatos();
     }
 
+    
+    private void cargarDatos() {
+        GestionInfantes operaciones = new GestionInfantes();
+    
+        // modelo de la tabla
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+
+        operaciones.llenarTablaInicial(modelo);
+    }
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,6 +53,7 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         btnBaja = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        btnActualizarCuota = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Estancia Infantil - Azcapotzalco: Consulta de Niveles");
@@ -81,6 +99,13 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
             }
         });
 
+        btnActualizarCuota.setText("Actualizar cuota");
+        btnActualizarCuota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarCuotaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,7 +128,10 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnRegresar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnBaja)))))
+                                .addComponent(btnBaja)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnActualizarCuota)
+                                .addGap(19, 19, 19)))))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -124,7 +152,8 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBaja)
-                    .addComponent(btnRegresar))
+                    .addComponent(btnRegresar)
+                    .addComponent(btnActualizarCuota))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -138,27 +167,68 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaActionPerformed
-        // 1. Pedimos la razón (Input Dialog)
-        String razon = javax.swing.JOptionPane.showInputDialog(this, 
-            "Ingrese la razón de la baja (Opcional):", 
-            "Confirmar Baja", 
-            javax.swing.JOptionPane.QUESTION_MESSAGE);
 
-        // 2. Si el usuario escribió algo o dio aceptar (y no Cancelar)
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            return;
+        }
+
+        String nombre = jTable1.getValueAt(fila, 0).toString(); // Obtenener nombre para el log
+
+        String razon = JOptionPane.showInputDialog(this, "Ingrese razón de baja:");
+
         if (razon != null) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "El infante ha sido dado de baja.\nRazón registrada: " + razon);
-            // Aquí iría el código real para borrar de la base de datos
+            
+            GestionInfantes operaciones = new GestionInfantes();
+
+            if(operaciones.procesarBaja(nombre, razon)) {
+                // actualizar tabla SOLO VISUAL hasta que se pongan los txt
+                ((javax.swing.table.DefaultTableModel)jTable1.getModel()).removeRow(fila);
+                javax.swing.JOptionPane.showMessageDialog(this, "Baja procesada correctamente.");
+            }
         }
     }//GEN-LAST:event_btnBajaActionPerformed
 
+    
+    
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // Simulación de búsqueda
         String nivel = (String) cmbFiltroNivel.getSelectedItem();
-        javax.swing.JOptionPane.showMessageDialog(this, "Filtrando alumnos por nivel: " + nivel);
-        // Aquí en el futuro se recargaría la tabla (JTable)
+        JOptionPane.showMessageDialog(this, "Filtrando alumnos por nivel: " + nivel);
+        // Aquí en el futuro se recargaría la tabla (JTable) ya con lo de los txt
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    
+    
+    private void btnActualizarCuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCuotaActionPerformed
+        int fila = jTable1.getSelectedRow();
+    
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un infante.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Obtener datos de la vista
+        String nivelActual = jTable1.getValueAt(fila, 2).toString();
+
+        
+        
+        int resp = JOptionPane.showConfirmDialog(this, "¿Requiere dieta especial?", "Actualizar", JOptionPane.YES_NO_OPTION);
+        boolean quiereDieta = (resp == JOptionPane.YES_OPTION);
+
+        
+        
+        GestionInfantes operaciones = new GestionInfantes();
+        double nuevoTotal = operaciones.calcularNuevaCuota(nivelActual, quiereDieta);
+
+        
+        
+        // Actualizar la vista
+        jTable1.setValueAt("$" + nuevoTotal, fila, 3);
+        javax.swing.JOptionPane.showMessageDialog(this, "Cuota actualizada.");
+    }//GEN-LAST:event_btnActualizarCuotaActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -185,6 +255,7 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarCuota;
     private javax.swing.JButton btnBaja;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegresar;
@@ -194,4 +265,5 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lblFiltro;
     private javax.swing.JLabel lblTitulo;
     // End of variables declaration//GEN-END:variables
+
 }

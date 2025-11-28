@@ -4,6 +4,12 @@
  */
 package uam.pvoe.sw.ei.formas;
 
+import uam.pvoe.sw.ei.modelo.Usuario;
+import uam.pvoe.sw.ei.operaciones.ValidarUsuario;
+import uam.pvoe.sw.ei.compartido.Compartido;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author btosk
@@ -97,25 +103,28 @@ public class LoginFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
-        // Importante: Asegúrate de tener las clases Usuario, ValidarUsuario y Compartido creadas
+       
+                
         String usuario = txtUsuario.getText();
         String pwd = new String(pwdPassword.getPassword());
 
-        uam.pvoe.sw.ei.modelo.Usuario usuarioValidar = new uam.pvoe.sw.ei.modelo.Usuario();
+        // crear usuario y validarlo
+        Usuario usuarioValidar = new Usuario();
         usuarioValidar.setLogin(usuario);
-        usuarioValidar.setPassword(pwd);
+        usuarioValidar.setPassword(pwd);       
+        ValidarUsuario validar = new ValidarUsuario();
 
-        uam.pvoe.sw.ei.operaciones.ValidarUsuario validar = new uam.pvoe.sw.ei.operaciones.ValidarUsuario();
-
+        
+        
         if (validar.validarUsuario(usuarioValidar)) {
-            // Guardamos el usuario para compartirlo
-            uam.pvoe.sw.ei.compartido.Compartido.loginUsuario = usuario; 
+            Compartido.loginUsuario = usuario; // guardar el usuario para compartirlo
 
             this.dispose();
             MenuPrincipalFrm menu = new MenuPrincipalFrm();
             menu.setVisible(true);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Login o Password incorrectos", 
+        } 
+        else {
+            JOptionPane.showMessageDialog(this, "Login o Password incorrectos", 
                     "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnValidarActionPerformed
