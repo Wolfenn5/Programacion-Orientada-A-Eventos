@@ -54,6 +54,7 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
         btnBaja = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         btnActualizarCuota = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Estancia Infantil - Azcapotzalco: Consulta de Niveles");
@@ -106,6 +107,13 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setText("Actualizar Datos");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,9 +137,10 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
                                 .addComponent(btnRegresar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnBaja)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnActualizarCuota)
-                                .addGap(19, 19, 19)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnActualizarCuota)))))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -149,12 +158,18 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
                     .addComponent(btnBuscar))
                 .addGap(37, 37, 37)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBaja)
-                    .addComponent(btnRegresar)
-                    .addComponent(btnActualizarCuota))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(btnRegresar)
+                        .addContainerGap(46, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBaja)
+                            .addComponent(btnEditar)
+                            .addComponent(btnActualizarCuota))
+                        .addGap(26, 26, 26))))
         );
 
         pack();
@@ -228,6 +243,40 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(this, "Cuota actualizada.");
     }//GEN-LAST:event_btnActualizarCuotaActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // 1. Verificar si seleccionó una fila
+        int fila = jTable1.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un infante para editar.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Obtener los valores actuales de la tabla
+        // Columna 0: Nombre, Columna 1: Apellidos
+        String nombreActual = jTable1.getValueAt(fila, 0).toString();
+        String apellidosActual = jTable1.getValueAt(fila, 1).toString();
+
+        // 3. Pedir nuevos datos usando InputDialogs
+        String nuevoNombre = javax.swing.JOptionPane.showInputDialog(this, "Editar Nombre:", nombreActual);
+
+        // Si el usuario cancela, nuevoNombre será null, así que validamos
+        if (nuevoNombre == null) return; 
+
+        String nuevosApellidos = javax.swing.JOptionPane.showInputDialog(this, "Editar Apellidos:", apellidosActual);
+        if (nuevosApellidos == null) return;
+
+        // 4. Guardar los cambios en la tabla (Visualmente)
+        jTable1.setValueAt(nuevoNombre, fila, 0);
+        jTable1.setValueAt(nuevosApellidos, fila, 1);
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Datos actualizados correctamente.");
+
+        // NOTA PARA EL FUTURO:
+        // Aquí deberías llamar a tu clase de Operaciones para actualizar el archivo TXT real.
+        // Ej: operaciones.actualizarInfante(fila, nuevoNombre, nuevosApellidos);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -258,6 +307,7 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarCuota;
     private javax.swing.JButton btnBaja;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbFiltroNivel;
     private javax.swing.JScrollPane jScrollPane1;
