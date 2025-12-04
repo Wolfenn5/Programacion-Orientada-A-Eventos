@@ -1,0 +1,9 @@
+dfsewr,asd,1,11,Masculino,dsf,sdfsdf123123,123123,123123,Maternal (1 a 2 años),Subnivel B,Matutino,Si,Ninguna,$ 3100.0
+sdf,asdasdewwrt,3,3,Masculino,dsfsdf,123wedffr,123123,123445,Maternal (1 a 2 años),Subnivel B,Vespertino,No,Ninguna,$ 2500.0
+asd,sdfsdf,3,3,Masculino,asdasd,123123wefwef,23234,34345,Preescolar (3 a 4 años),Subnivel B,Vespertino,Si,Ninguna,$ 2800.0
+sdfdf,asdad,3,0,Femenino,sdfsdf,asdads12313,123132,23123,Lactantes (45 dias a 11 meses),Subnivel A,Vespertino,Si,Ninguna,$ 3400.0
+sfd,asdsdfsdf,4,4,Masculino,sasd,sada2323423,34534534,2323,Lactantes (45 dias a 11 meses),Subnivel A,Vespertino,No,Ninguna,$ 3400.0
+testuno,apellidosuno,0,4,Masculino,sdfsdfds,asd21323,123123,456456,Maternal (1 a 2 años),Subnivel A,Matutino,Si,Ninguna,$ 3100.0
+asdasd,asdasd,0,3,Masculino,sdfsdf,adsads12323,123,,Preescolar (3 a 4 años),Subnivel A,Vespertino,No,Ninguna,$ 2200.0
+test,testapell,0,5,Masculino,testtutor,sdfe,asd,asd,Lactantes (45 dias a 11 meses),Subnivel A,Matutino,Si,Ninguna,$ 2500.0
+asdasd,asd,0,4,Masculino,sdfdf,asdasd123,123123,12332,Lactantes (45 dias a 11 meses),Subnivel B,Matutino,No,Ninguna,$ 2800.0

@@ -4,7 +4,9 @@
  */
 package uam.pvoe.sw.ei.operaciones;
 import uam.pvoe.sw.ei.modelo.Usuario;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -12,11 +14,33 @@ import uam.pvoe.sw.ei.modelo.Usuario;
  */
 public class ValidarUsuario {
     public boolean validarUsuario(Usuario usr) {
-        // Simulamos un usuario y contraseña fijos
-        if (usr.getLogin().equals("admin") && usr.getPassword().equals("1234")) {
-            return true;
-        } else {
-            return false;
+        boolean acceso = false;
+        
+        
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("usuarios.txt"))) {
+            String linea;
+            
+
+            while ((linea = br.readLine()) != null) {
+                StringTokenizer st = new StringTokenizer(linea, ","); // , como separador
+                
+                
+                if (st.countTokens() >= 2) { // tokens
+                    String usuarioArchivo = st.nextToken();
+                    String passwordArchivo = st.nextToken();
+                    
+                    
+                    if (usr.getLogin().equals(usuarioArchivo) && usr.getPassword().equals(passwordArchivo)) {
+                        acceso = true;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer el archivo txt de usuarios: " + e.getMessage());
         }
+        
+        return acceso;
     }
 }

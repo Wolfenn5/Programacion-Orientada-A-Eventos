@@ -4,7 +4,6 @@
  */
 package uam.pvoe.sw.ei.formas;
 
-import javax.swing.JOptionPane;
 /**
  *
  * @author btosk
@@ -12,12 +11,157 @@ import javax.swing.JOptionPane;
 public class RegistroInfanteFrm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroInfanteFrm.class.getName());
-
+    
+    // Variables para controlar el modo Edición
+    private boolean modoEdicion = false;
+    private String nombreOriginal = "";
+    private String apellidoOriginal = "";
+    
+    
+    
     /**
      * Creates new form RegistrarInfanteFrm
      */
     public RegistroInfanteFrm() {
         initComponents();
+   
+        javax.swing.JSpinner.DefaultEditor editorEdad = (javax.swing.JSpinner.DefaultEditor) spnEdad.getEditor();
+        editorEdad.getTextField().setEditable(false); // que no se pueda editar el spinner de edad-años
+        
+        
+        javax.swing.JSpinner.DefaultEditor editorMeses = (javax.swing.JSpinner.DefaultEditor) spnMeses.getEditor();
+        editorMeses.getTextField().setEditable(false); // que no se pueda editar el spinner de edad-meses
+        
+        
+        
+        
+        // --- NUEVO: LISTENER PARA CAMBIO DE NIVEL AUTOMÁTICO ---
+        javax.swing.event.ChangeListener listenerEdad = new javax.swing.event.ChangeListener() {
+            @Override
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                actualizarNivelPorEdad();
+            }
+        };
+        
+        // Se lo asignamos al spinner de Años (que es el que define el nivel principalmente)
+        spnEdad.addChangeListener(listenerEdad);
+        
+        // (Opcional) También al de meses por si la lógica cambia en el futuro
+        // spnMeses.addChangeListener(listenerEdad);
+        
+        
+    }
+    
+    
+    
+    // Método de seguridad: Aplasta cualquier selección manual incorrecta
+    private void corregirNivelPorEdad() {
+        int anios = (Integer) spnEdad.getValue();
+        // Nota: Asumimos que si tiene 0 años es Lactantes, 
+        // pero si tuvieras lógica de meses, podrías usar spnMeses.getValue() aquí también.
+        
+        if (anios == 0) {
+            cmbNivel.setSelectedIndex(0); // Lactantes
+        } else if (anios >= 1 && anios <= 2) {
+            cmbNivel.setSelectedIndex(1); // Maternal
+        } else if (anios >= 3) {
+            cmbNivel.setSelectedIndex(2); // Preescolar
+        }
+    }
+    
+    
+    
+    // Método para automatizar el Nivel según la edad
+    private void actualizarNivelPorEdad() {
+        int anios = (Integer) spnEdad.getValue();
+        
+        // Usamos los índices del Combo Box:
+        // 0 = Lactantes
+        // 1 = Maternal
+        // 2 = Preescolar
+        
+        if (anios == 0) {
+            cmbNivel.setSelectedIndex(0); // Lactantes
+        } else if (anios >= 1 && anios <= 2) {
+            cmbNivel.setSelectedIndex(1); // Maternal
+        } else if (anios >= 3) {
+            cmbNivel.setSelectedIndex(2); // Preescolar
+        }
+        
+        // Opcional: Si tienes más niveles, ajusta la lógica aquí.
+    }
+    
+    
+    // -------------------------------------------------------------
+    // PEGA ESTE BLOQUE EN RegistroInfanteFrm.java
+    // -------------------------------------------------------------
+    public void cargarDatosParaEdicion(String[] datos) {
+        this.modoEdicion = true;
+        this.nombreOriginal = datos[0];
+        this.apellidoOriginal = datos[1];
+        
+        // Cambio visual para que el usuario sepa que está editando
+        this.setTitle("Estancia Infantil - Azcapotzalco: EDICIoN DE DATOS");
+        btnGuardar.setText("Actualizar Datos");
+        
+        // 1. Llenar Textos y Spinners
+        txtNombre.setText(datos[0]);
+        txtApellidos.setText(datos[1]);
+        
+        try {
+            spnEdad.setValue(Integer.valueOf(datos[2]));
+            spnMeses.setValue(Integer.valueOf(datos[3]));
+        } catch (NumberFormatException e) {
+            // Si el archivo tenía basura, ponemos 0
+            spnEdad.setValue(0);
+            spnMeses.setValue(0);
+        }
+        
+        // 2. Llenar Género
+        if (datos[4].equals("Masculino")) rdoMasculino.setSelected(true);
+        else rdoFemenino.setSelected(true);
+        
+        // 3. Tutor y Contacto
+        txtTutor.setText(datos[5]);
+        txtDireccion.setText(datos[6]);
+        txtTel.setText(datos[7]);
+        txtEmergencia.setText(datos[8]);
+        
+        // 4. Niveles
+        cmbNivel.setSelectedItem(datos[9]);
+        cmbSubNivel.setSelectedItem(datos[10]);
+        
+        // 5. Horario
+        if (datos[11].equals("Matutino")) rdoMatutino.setSelected(true);
+        else rdoVespertino.setSelected(true);
+        
+        // 6. Salud
+        chkDieta.setSelected(datos[12].equals("Si"));
+        // Reemplazar ; por , para mostrarlo bien en pantalla (en el archivo usamos ;)
+        txtAreaDieta.setText(datos[13].equals("Ninguna") ? "" : datos[13].replace(";", ","));
+        
+        // 7. Costos
+        lblCostoTotal.setText(datos[14]);
+    }
+    
+    
+    private void limpiarFormulario() {
+        txtNombre.setText("");
+        txtApellidos.setText("");
+        spnEdad.setValue(0);
+        spnMeses.setValue(0);
+        grpGenero.clearSelection();
+        txtTutor.setText("");
+        txtDireccion.setText("");
+        txtTel.setText("");
+        txtEmergencia.setText("");
+        cmbNivel.setSelectedIndex(0);
+        grpHorario.clearSelection();
+        chkDieta.setSelected(false);
+        txtAreaDieta.setText("");
+        lblCostoNivel.setText("$0.00");
+        lblCostoExtra.setText("$0.00");
+        lblCostoTotal.setText("$0.00");
     }
 
     /**
@@ -82,7 +226,19 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
 
         jLabel1.setText("Apellidos");
 
-        jLabel2.setText("Edad (si el es recien nacido y tiene dias, ponga 0 meses) ");
+        jLabel2.setText("Edad (si el infante tiene 45 dias o mas, ponga 0 meses) ");
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
+        txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidosKeyTyped(evt);
+            }
+        });
 
         spnEdad.setModel(new javax.swing.SpinnerNumberModel(0, 0, 4, 1));
 
@@ -105,6 +261,24 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
         jLabel5.setText("Telefono");
 
         jLabel6.setText("Telefono de Emergencia");
+
+        txtTutor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTutorKeyTyped(evt);
+            }
+        });
+
+        txtTel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelKeyTyped(evt);
+            }
+        });
+
+        txtEmergencia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmergenciaKeyTyped(evt);
+            }
+        });
 
         cmbNivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lactantes (45 dias a 11 meses)", "Maternal (1 a 2 años)", "Preescolar (3 a 4 años)" }));
 
@@ -246,17 +420,17 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(40, 40, 40)
+                                        .addGap(64, 64, 64)
                                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(113, 113, 113)
+                                        .addGap(109, 109, 109)
                                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(89, 89, 89))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel2)
-                                        .addGap(20, 20, 20))))
+                                        .addGap(22, 22, 22))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(rdoFemenino, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,91 +486,97 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtEmergencia, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(151, 151, 151))))
+                            .addComponent(jLabel6)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmergencia, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(91, 91, 91))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblDatosInfante)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombreInfante)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rdoMasculino)
-                    .addComponent(rdoFemenino)
-                    .addComponent(spnEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnMeses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombreTutor)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmergencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSubNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rdoMatutino)
-                    .addComponent(rdoVespertino))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(chkDieta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNombreInfante)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdoMasculino)
+                            .addComponent(rdoFemenino)
+                            .addComponent(spnEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnMeses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNombreTutor)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmergencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSubNivel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdoMatutino)
+                            .addComponent(rdoVespertino))
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(chkDieta)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCalcular)))
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRegresar)
+                            .addComponent(btnGuardar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCalcular)))
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegresar)
-                    .addComponent(btnGuardar))
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel12))))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+            
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.dispose();
         MenuPrincipalFrm menu = new MenuPrincipalFrm();
@@ -404,6 +584,8 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
+        // 1. Corrección forzosa
+        corregirNivelPorEdad();
         double costoBase = 0.0;
         double costoExtra = 0.0;
 
@@ -427,19 +609,88 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        //JOptionPane.showMessageDialog(this, "Datos del infante registrados correctamente.");
-        // limpiar campos después de guardar y poner los metodos para guardar en el txt, ademas poner la clase en operaciones
-        // Obtenemos los valores
-        int anios = (Integer) spnEdad.getValue();
-        int meses = (Integer) spnMeses.getValue(); // Nuevo campo
+        // 1. VALIDACIÓN EXTERNA (Solo una línea)
+        String error = uam.pvoe.sw.ei.operaciones.FormularioHelper.validarCampos(
+                txtNombre, txtApellidos, txtTutor, txtTel, rdoMasculino, rdoFemenino, rdoMatutino, rdoVespertino);
+        
+        if (error != null) {
+            javax.swing.JOptionPane.showMessageDialog(this, error, "Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // ¡AGREGA ESTO AQUÍ!
+        // Esto corrige el nivel milisegundos antes de guardar, 
+        // anulando cualquier cambio manual incorrecto del usuario.
+        corregirNivelPorEdad();
+        
+        
+        
+        // 2. RECOLECCIÓN DE DATOS (Solo una línea)
+        // Ahora sí, lee los datos. 'nivel' tomará el valor corregido.
         String nombre = txtNombre.getText();
+        String nivel = cmbNivel.getSelectedItem().toString();
+        // Aseguramos que el costo esté calculado
+        if(lblCostoTotal.getText().equals("$0.00")) btnCalcularActionPerformed(null);
+        
+        uam.pvoe.sw.ei.modelo.Infante infante = uam.pvoe.sw.ei.operaciones.FormularioHelper.recolectarDatos(
+                txtNombre, txtApellidos, spnEdad, spnMeses, rdoMasculino, txtTutor, txtDireccion, 
+                txtTel, txtEmergencia, cmbNivel, cmbSubNivel, rdoMatutino, chkDieta, txtAreaDieta, lblCostoTotal);
 
-        // Mostramos mensaje confirmando (Simulación)
-        String mensaje = "Infante registrado: " + nombre + "\n" +
-                         "Edad: " + anios + " años y " + meses + " meses.";
+        // 3. GUARDADO (Lógica de Negocio)
+        uam.pvoe.sw.ei.operaciones.GestionInfantes gestor = new uam.pvoe.sw.ei.operaciones.GestionInfantes();
+        boolean exito;
 
-        javax.swing.JOptionPane.showMessageDialog(this, mensaje);
+        if (modoEdicion) {
+            gestor.eliminarInfante(nombreOriginal, apellidoOriginal);
+            exito = gestor.registrarInfante(infante.toCSV());
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Actualización exitosa.");
+                this.dispose();
+                new ConsultaNivelesFrm().setVisible(true);
+            }
+        } else {
+            exito = gestor.registrarInfante(infante.toCSV());
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Registro exitoso.");
+                limpiarFormulario();
+            }
+        }
+        
+        if (!exito) javax.swing.JOptionPane.showMessageDialog(this, "Error crítico al guardar.");
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtTelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelKeyTyped
+        if(!Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+}
+    }//GEN-LAST:event_txtTelKeyTyped
+
+    private void txtEmergenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmergenciaKeyTyped
+        if(!Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+}
+    }//GEN-LAST:event_txtEmergenciaKeyTyped
+
+    private void txtTutorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTutorKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isLetter(c) && c != ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTutorKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isLetter(c) && c != ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtApellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isLetter(c) && c != ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtApellidosKeyTyped
 
     /**
      * @param args the command line arguments
