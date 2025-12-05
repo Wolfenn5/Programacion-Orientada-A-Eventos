@@ -4,6 +4,13 @@
  */
 package uam.pvoe.sw.ei.formas;
 
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.event.ChangeListener;
+import uam.pvoe.sw.ei.modelo.Infante;
+import uam.pvoe.sw.ei.operaciones.FormularioHelper;
+import uam.pvoe.sw.ei.operaciones.GestionInfantes;
+
 /**
  *
  * @author btosk
@@ -12,7 +19,7 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroInfanteFrm.class.getName());
     
-    // Variables para controlar el modo Edición
+    // "modo" edicion
     private boolean modoEdicion = false;
     private String nombreOriginal = "";
     private String apellidoOriginal = "";
@@ -25,122 +32,104 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
     public RegistroInfanteFrm() {
         initComponents();
    
-        javax.swing.JSpinner.DefaultEditor editorEdad = (javax.swing.JSpinner.DefaultEditor) spnEdad.getEditor();
-        editorEdad.getTextField().setEditable(false); // que no se pueda editar el spinner de edad-años
+        // spinners
+        JSpinner.DefaultEditor editorEdad = (JSpinner.DefaultEditor) spnEdad.getEditor();
+        editorEdad.getTextField().setEditable(false); 
+        JSpinner.DefaultEditor editorMeses = (JSpinner.DefaultEditor) spnMeses.getEditor();
+        editorMeses.getTextField().setEditable(false); 
         
-        
-        javax.swing.JSpinner.DefaultEditor editorMeses = (javax.swing.JSpinner.DefaultEditor) spnMeses.getEditor();
-        editorMeses.getTextField().setEditable(false); // que no se pueda editar el spinner de edad-meses
-        
-        
-        
-        
-        // --- NUEVO: LISTENER PARA CAMBIO DE NIVEL AUTOMÁTICO ---
-        javax.swing.event.ChangeListener listenerEdad = new javax.swing.event.ChangeListener() {
+
+        ChangeListener listenerEdad = new ChangeListener() {
             @Override
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 actualizarNivelPorEdad();
             }
         };
-        
-        // Se lo asignamos al spinner de Años (que es el que define el nivel principalmente)
-        spnEdad.addChangeListener(listenerEdad);
-        
-        // (Opcional) También al de meses por si la lógica cambia en el futuro
+        spnEdad.addChangeListener(listenerEdad); // al spinner de años
         // spnMeses.addChangeListener(listenerEdad);
-        
-        
     }
     
-    
-    
-    // Método de seguridad: Aplasta cualquier selección manual incorrecta
+ 
     private void corregirNivelPorEdad() {
         int anios = (Integer) spnEdad.getValue();
-        // Nota: Asumimos que si tiene 0 años es Lactantes, 
-        // pero si tuvieras lógica de meses, podrías usar spnMeses.getValue() aquí también.
-        
         if (anios == 0) {
-            cmbNivel.setSelectedIndex(0); // Lactantes
+            cmbNivel.setSelectedIndex(0); // lactantes
         } else if (anios >= 1 && anios <= 2) {
-            cmbNivel.setSelectedIndex(1); // Maternal
+            cmbNivel.setSelectedIndex(1); // maternal
         } else if (anios >= 3) {
-            cmbNivel.setSelectedIndex(2); // Preescolar
+            cmbNivel.setSelectedIndex(2); // prescolar
         }
     }
     
     
-    
-    // Método para automatizar el Nivel según la edad
     private void actualizarNivelPorEdad() {
-        int anios = (Integer) spnEdad.getValue();
-        
-        // Usamos los índices del Combo Box:
-        // 0 = Lactantes
-        // 1 = Maternal
-        // 2 = Preescolar
-        
+        int anios = (Integer) spnEdad.getValue();        
         if (anios == 0) {
-            cmbNivel.setSelectedIndex(0); // Lactantes
+            cmbNivel.setSelectedIndex(0); // lactantes
         } else if (anios >= 1 && anios <= 2) {
-            cmbNivel.setSelectedIndex(1); // Maternal
+            cmbNivel.setSelectedIndex(1); // maternal
         } else if (anios >= 3) {
-            cmbNivel.setSelectedIndex(2); // Preescolar
+            cmbNivel.setSelectedIndex(2); // prescolar
         }
-        
-        // Opcional: Si tienes más niveles, ajusta la lógica aquí.
     }
     
-    
-    // -------------------------------------------------------------
-    // PEGA ESTE BLOQUE EN RegistroInfanteFrm.java
-    // -------------------------------------------------------------
+
     public void cargarDatosParaEdicion(String[] datos) {
         this.modoEdicion = true;
         this.nombreOriginal = datos[0];
         this.apellidoOriginal = datos[1];
         
-        // Cambio visual para que el usuario sepa que está editando
-        this.setTitle("Estancia Infantil - Azcapotzalco: EDICIoN DE DATOS");
-        btnGuardar.setText("Actualizar Datos");
         
-        // 1. Llenar Textos y Spinners
+        this.setTitle("Estancia Infantil - Azcapotzalco: EDICION DE DATOS");
+        btnGuardar.setText("Actualizar Datos");
+        btnRegresar.setText("Volver a Consultas");
+        
+        // re llenado de datos
         txtNombre.setText(datos[0]);
         txtApellidos.setText(datos[1]);
-        
         try {
             spnEdad.setValue(Integer.valueOf(datos[2]));
             spnMeses.setValue(Integer.valueOf(datos[3]));
         } catch (NumberFormatException e) {
-            // Si el archivo tenía basura, ponemos 0
+            // "excepcion" 0 por si hay basura 
             spnEdad.setValue(0);
             spnMeses.setValue(0);
         }
         
-        // 2. Llenar Género
-        if (datos[4].equals("Masculino")) rdoMasculino.setSelected(true);
-        else rdoFemenino.setSelected(true);
         
-        // 3. Tutor y Contacto
+        if (datos[4].equals("Masculino")) {
+            rdoMasculino.setSelected(true);
+        }
+        else {
+            rdoFemenino.setSelected(true);
+        }
+        
+        
+
         txtTutor.setText(datos[5]);
         txtDireccion.setText(datos[6]);
         txtTel.setText(datos[7]);
         txtEmergencia.setText(datos[8]);
         
-        // 4. Niveles
+
+        
         cmbNivel.setSelectedItem(datos[9]);
         cmbSubNivel.setSelectedItem(datos[10]);
         
-        // 5. Horario
-        if (datos[11].equals("Matutino")) rdoMatutino.setSelected(true);
-        else rdoVespertino.setSelected(true);
+
         
-        // 6. Salud
+        if (datos[11].equals("Matutino")) {
+            rdoMatutino.setSelected(true);
+        }
+        else {
+            rdoVespertino.setSelected(true);
+        }
+        
+
         chkDieta.setSelected(datos[12].equals("Si"));
-        // Reemplazar ; por , para mostrarlo bien en pantalla (en el archivo usamos ;)
-        txtAreaDieta.setText(datos[13].equals("Ninguna") ? "" : datos[13].replace(";", ","));
+        txtAreaDieta.setText(datos[13].equals("Ninguna") ? "" : datos[13].replace(";", ",")); // para mostrar bien ,
         
-        // 7. Costos
+
         lblCostoTotal.setText(datos[14]);
     }
     
@@ -579,84 +568,114 @@ public class RegistroInfanteFrm extends javax.swing.JFrame {
             
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.dispose();
-        MenuPrincipalFrm menu = new MenuPrincipalFrm();
-        menu.setVisible(true);
+        
+        if (modoEdicion) {
+            ConsultaNivelesFrm consulta = new ConsultaNivelesFrm();
+            consulta.setVisible(true);
+        } else {
+            MenuPrincipalFrm menu = new MenuPrincipalFrm();
+            menu.setVisible(true);
+        }
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-        // 1. Corrección forzosa
         corregirNivelPorEdad();
         double costoBase = 0.0;
         double costoExtra = 0.0;
 
         String nivel = (String) cmbNivel.getSelectedItem();
 
-        
-        // precios
-        if(nivel.contains("Lactantes")) costoBase = 2800.0;
-        else if (nivel.contains("Maternal")) costoBase = 2500.0;
-        else if (nivel.contains("Preescolar")) costoBase = 2200.0;
-               
-        if(chkDieta.isSelected()) costoExtra = 600.0;
 
-        
-        
-        
-        // Asignar a los labels 
+        if(nivel.contains("Lactantes")){
+            costoBase = 3000.0;
+        }
+        else if (nivel.contains("Maternal")) {
+            costoBase = 2500.0;
+        }
+        else if (nivel.contains("Preescolar")) {
+            costoBase = 2000.0;
+        }
+        if(chkDieta.isSelected()) costoExtra = 600.0;
         lblCostoNivel.setText("$ " + costoBase);
         lblCostoExtra.setText("$ " + costoExtra);
         lblCostoTotal.setText("$ " + (costoBase + costoExtra));
     }//GEN-LAST:event_btnCalcularActionPerformed
 
+    
+    
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // 1. VALIDACIÓN EXTERNA (Solo una línea)
-        String error = uam.pvoe.sw.ei.operaciones.FormularioHelper.validarCampos(
-                txtNombre, txtApellidos, txtTutor, txtTel, rdoMasculino, rdoFemenino, rdoMatutino, rdoVespertino);
+        String error = FormularioHelper.validarCampos(
+                txtNombre, 
+                txtApellidos, 
+                txtTutor, 
+                txtTel, 
+                rdoMasculino, 
+                rdoFemenino, 
+                rdoMatutino, 
+                rdoVespertino);
+        
+        
         
         if (error != null) {
-            javax.swing.JOptionPane.showMessageDialog(this, error, "Error", javax.swing.JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         
-        // ¡AGREGA ESTO AQUÍ!
-        // Esto corrige el nivel milisegundos antes de guardar, 
-        // anulando cualquier cambio manual incorrecto del usuario.
         corregirNivelPorEdad();
         
         
+        // "excepcion" de calcular costos
+        if(lblCostoTotal.getText().equals("$0.00")){
+            btnCalcularActionPerformed(null);
+        }
         
-        // 2. RECOLECCIÓN DE DATOS (Solo una línea)
-        // Ahora sí, lee los datos. 'nivel' tomará el valor corregido.
-        String nombre = txtNombre.getText();
-        String nivel = cmbNivel.getSelectedItem().toString();
-        // Aseguramos que el costo esté calculado
-        if(lblCostoTotal.getText().equals("$0.00")) btnCalcularActionPerformed(null);
         
-        uam.pvoe.sw.ei.modelo.Infante infante = uam.pvoe.sw.ei.operaciones.FormularioHelper.recolectarDatos(
-                txtNombre, txtApellidos, spnEdad, spnMeses, rdoMasculino, txtTutor, txtDireccion, 
-                txtTel, txtEmergencia, cmbNivel, cmbSubNivel, rdoMatutino, chkDieta, txtAreaDieta, lblCostoTotal);
+        Infante infante = FormularioHelper.recolectarDatos(
+                txtNombre, 
+                txtApellidos, 
+                spnEdad, 
+                spnMeses, 
+                rdoMasculino, 
+                txtTutor, 
+                txtDireccion, 
+                txtTel, 
+                txtEmergencia, 
+                cmbNivel, 
+                cmbSubNivel, 
+                rdoMatutino, 
+                chkDieta, 
+                txtAreaDieta, 
+                lblCostoTotal);
 
-        // 3. GUARDADO (Lógica de Negocio)
-        uam.pvoe.sw.ei.operaciones.GestionInfantes gestor = new uam.pvoe.sw.ei.operaciones.GestionInfantes();
+        
+        
+        GestionInfantes gestor = new GestionInfantes();
         boolean exito;
 
+        
+        
         if (modoEdicion) {
             gestor.eliminarInfante(nombreOriginal, apellidoOriginal);
             exito = gestor.registrarInfante(infante.toCSV());
             if (exito) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Actualización exitosa.");
+                JOptionPane.showMessageDialog(this, "Actualización exitosa.");
                 this.dispose();
                 new ConsultaNivelesFrm().setVisible(true);
             }
-        } else {
+        } 
+        else {
             exito = gestor.registrarInfante(infante.toCSV());
             if (exito) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Registro exitoso.");
+                JOptionPane.showMessageDialog(this, "Registro exitoso.");
                 limpiarFormulario();
             }
         }
         
-        if (!exito) javax.swing.JOptionPane.showMessageDialog(this, "Error crítico al guardar.");
+        if (!exito) {
+            JOptionPane.showMessageDialog(this, "Error al guardar.");
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtTelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelKeyTyped

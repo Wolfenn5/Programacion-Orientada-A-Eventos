@@ -26,13 +26,10 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
 
     
     private void cargarDatos() {
-        uam.pvoe.sw.ei.operaciones.GestionInfantes operaciones = new uam.pvoe.sw.ei.operaciones.GestionInfantes();
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        GestionInfantes operaciones = new GestionInfantes();
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        String filtro = (String) cmbFiltroNivel.getSelectedItem(); // obtener el filtro del cmbbox
 
-        // Obtenemos el filtro seleccionado en el combo box
-        String filtro = (String) cmbFiltroNivel.getSelectedItem();
-
-        // Llamamos al método que lee el TXT
         operaciones.llenarTablaDesdeArchivo(modelo, filtro); 
     }
     
@@ -179,25 +176,26 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
 
         int fila = jTable1.getSelectedRow();
         if (fila == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un infante para dar de baja.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un infante para dar de baja.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Obtenemos Nombre y Apellido para buscar en el TXT
+       
+        
         String nombre = jTable1.getValueAt(fila, 0).toString();
         String apellido = jTable1.getValueAt(fila, 1).toString();
-
-        String razon = javax.swing.JOptionPane.showInputDialog(this, "Razón de baja:");
+        String razon = JOptionPane.showInputDialog(this, "Razón de baja:");
         if (razon == null) return;
 
-        uam.pvoe.sw.ei.operaciones.GestionInfantes operaciones = new uam.pvoe.sw.ei.operaciones.GestionInfantes();
+        GestionInfantes operaciones = new GestionInfantes();
 
-        // Intentamos eliminar del archivo
+        
+        //
         if (operaciones.eliminarInfante(nombre, apellido)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Baja registrada y archivo actualizado.");
-            cargarDatos(); // RECARGAMOS LA TABLA DESDE EL TXT
+            JOptionPane.showMessageDialog(this, "Baja registrada y archivo actualizado.");
+            cargarDatos(); // recargar la tabla
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar del archivo.");
+            JOptionPane.showMessageDialog(this, "Error al eliminar del archivo.");
         }
     }//GEN-LAST:event_btnBajaActionPerformed
 
@@ -213,30 +211,32 @@ public class ConsultaNivelesFrm extends javax.swing.JFrame {
         int fila = jTable1.getSelectedRow();
         
         if (fila == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un infante para editar.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un infante para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // 1. Obtener identificadores de la tabla
+        //identificadores de la tabla
         String nombre = jTable1.getValueAt(fila, 0).toString();
         String apellidos = jTable1.getValueAt(fila, 1).toString();
 
-        // 2. Buscar los datos COMPLETOS en el archivo
-        uam.pvoe.sw.ei.operaciones.GestionInfantes operaciones = new uam.pvoe.sw.ei.operaciones.GestionInfantes();
+
+        GestionInfantes operaciones = new GestionInfantes();
         String[] datosCompletos = operaciones.buscarInfante(nombre, apellidos);
         
+        
+        // "modo" EDICION
         if (datosCompletos != null) {
-            // 3. Abrir RegistroInfanteFrm en modo EDICIÓN
-            this.dispose(); // Cerramos la consulta momentáneamente
             
-            RegistroInfanteFrm frmEdicion = new RegistroInfanteFrm();
+            this.dispose();
+            
+            // "crear" ventana "nueva" pero para el modo edicion
+            RegistroInfanteFrm frmEdicion = new RegistroInfanteFrm(); 
             frmEdicion.setVisible(true);
             
-            // ¡AQUÍ ESTÁ LA CLAVE! Pasamos los datos al otro formulario
-            frmEdicion.cargarDatosParaEdicion(datosCompletos);
+            frmEdicion.cargarDatosParaEdicion(datosCompletos); // llenado de esa ventana nueva
             
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Error: No se encontraron los datos originales.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error: No se encontraron los datos originales.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 

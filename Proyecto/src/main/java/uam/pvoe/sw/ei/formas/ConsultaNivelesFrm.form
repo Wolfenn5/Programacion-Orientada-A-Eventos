@@ -42,10 +42,7 @@
                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblTitulo" min="-2" pref="159" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">

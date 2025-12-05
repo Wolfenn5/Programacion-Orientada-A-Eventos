@@ -19,13 +19,10 @@ import uam.pvoe.sw.ei.modelo.Infante;
  */
 public class FormularioHelper {
 
-    // Método estático para validar antes de procesar
-    public static String validarCampos(JTextField nombre, JTextField apellidos, JTextField tutor, JTextField tel, 
-                                     JRadioButton rdoMasc, JRadioButton rdoFem, 
-                                     JRadioButton rdoMat, JRadioButton rdoVesp) {
+
+    public static String validarCampos(JTextField nombre, JTextField apellidos, JTextField tutor, JTextField tel, JRadioButton rdoMasc, JRadioButton rdoFem, JRadioButton rdoMat, JRadioButton rdoVesp) {
         
-        if (nombre.getText().trim().isEmpty() || apellidos.getText().trim().isEmpty() || 
-            tutor.getText().trim().isEmpty() || tel.getText().trim().isEmpty()) {
+        if (nombre.getText().trim().isEmpty() || apellidos.getText().trim().isEmpty() || tutor.getText().trim().isEmpty() || tel.getText().trim().isEmpty()) {
             return "Faltan datos obligatorios. Por favor verifique:\n\n"
                     + "- Nombre y Apellidos del infante\n"
                     + "- Género\n"
@@ -33,18 +30,20 @@ public class FormularioHelper {
                     + "- Teléfono\n"
                     + "- Turno";
         }
-        if (!rdoMasc.isSelected() && !rdoFem.isSelected()) return "Seleccione género.";
-        if (!rdoMat.isSelected() && !rdoVesp.isSelected()) return "Seleccione turno.";
-        
-        return null; // Null significa "Todo OK"
+        if (!rdoMasc.isSelected() && !rdoFem.isSelected()) 
+        {
+            return "Seleccione género.";
+        }
+        if (!rdoMat.isSelected() && !rdoVesp.isSelected()) {
+            return "Seleccione turno.";
+        }
+        return null; // todo bien
     }
 
-    // Método para empaquetar los datos de la GUI en un objeto Infante
-    public static Infante recolectarDatos(JTextField txtNombre, JTextField txtApellidos, JSpinner spnEdad, JSpinner spnMeses,
-                                          JRadioButton rdoMasculino, JTextField txtTutor, JTextField txtDireccion, 
-                                          JTextField txtTel, JTextField txtEmergencia, JComboBox cmbNivel, 
-                                          JComboBox cmbSubNivel, JRadioButton rdoMatutino, JCheckBox chkDieta, 
-                                          JTextArea txtAreaDieta, JLabel lblCostoTotal) {
+    
+    // datos en un objeto Infante para usar en el "modo" edicion
+    public static Infante recolectarDatos(JTextField txtNombre, JTextField txtApellidos, JSpinner spnEdad, JSpinner spnMeses, JRadioButton rdoMasculino, JTextField txtTutor, JTextField txtDireccion,  JTextField txtTel, JTextField txtEmergencia, JComboBox cmbNivel, JComboBox cmbSubNivel, JRadioButton rdoMatutino, JCheckBox chkDieta, JTextArea txtAreaDieta, JLabel lblCostoTotal) {
+        
         
         Infante inf = new Infante();
         inf.nombre = txtNombre.getText();
@@ -60,10 +59,8 @@ public class FormularioHelper {
         inf.subnivel = cmbSubNivel.getSelectedItem().toString();
         inf.horario = rdoMatutino.isSelected() ? "Matutino" : "Vespertino";
         inf.tieneDieta = chkDieta.isSelected() ? "Si" : "No";
-        
         String dieta = txtAreaDieta.getText().replace("\n", " ").replace(",", ";");
         inf.detalleDieta = dieta.isEmpty() ? "Ninguna" : dieta;
-        
         inf.costoTotal = lblCostoTotal.getText();
         return inf;
     }

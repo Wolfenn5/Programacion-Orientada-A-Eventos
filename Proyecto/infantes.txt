@@ -7,3 +7,7 @@ testuno,apellidosuno,0,4,Masculino,sdfsdfds,asd21323,123123,456456,Maternal (1 a
 asdasd,asdasd,0,3,Masculino,sdfsdf,adsads12323,123,,Preescolar (3 a 4 años),Subnivel A,Vespertino,No,Ninguna,$ 2200.0
 test,testapell,0,5,Masculino,testtutor,sdfe,asd,asd,Lactantes (45 dias a 11 meses),Subnivel A,Matutino,Si,Ninguna,$ 2500.0
 asdasd,asd,0,4,Masculino,sdfdf,asdasd123,123123,12332,Lactantes (45 dias a 11 meses),Subnivel B,Matutino,No,Ninguna,$ 2800.0
+asd,asd,4,0,Femenino,asdasd,asdwe,12356,,Preescolar (3 a 4 años),Subnivel B,Matutino,Si,Ninguna,$ 2600.0
+wert,asd,1,0,Femenino,poiu,{ñlkdsf,098,3454,Maternal (1 a 2 años),Subnivel B,Matutino,Si,Ninguna,$ 3100.0
+ñlkj,mnb,4,0,Femenino,lkmdfkm,lmkml,090983,321,Preescolar (3 a 4 años),Subnivel A,Vespertino,Si,sdfñlkjkl,$ 2600.0
+cvbn,lksdf,4,0,Femenino,lskdfpok,klklknl,576512,123,Preescolar (3 a 4 años),Subnivel A,Matutino,No,Ninguna,$ 2000.0
